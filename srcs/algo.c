@@ -133,7 +133,67 @@ void	quick_b(t_deques *deq, int start, int end)
 }
 */
 
-void	ab(t_deques deq, )
+void	ab(t_deques *deq, int size)
+{
+	int	cnt;
+	int	racnt;
+	int	pbcnt;
+	int	pivot;
+	int	tmp;
+
+	if (&deq->a.size <= (t_u)3)
+	{
+		smaller(deq);
+		return ;
+	}
+	cnt = deq->a.size;
+	pivot = deq->ordered[size/ 2];
+	racnt = 0;
+	pbcnt = 0;
+
+	while (cnt--)
+	{
+		if (front(&deq->a) > deq->ordered[med])
+			racnt += ra(deq);
+		else
+			pbcnt += pb(deq);
+	}
+	tmp = racnt;
+	while (tmp--)
+		rra(deq);
+	ab(deq, racnt);
+	ba(deq, pbcnt);
+}
+
+void	ba(t_deques deq*, int size)
+{
+	int cnt;
+	int rbcnt;
+	int pacnt;
+	int pivot;
+	int tmp;
+
+	if (size == 1)
+	{
+		pa(deq);
+		return ;
+	}
+	cnt = deq->b.size;
+	pivot = deq->ordered[end - size / 2];
+	rbcnt = 0;
+	pacnt = 0;
+	while (size--)
+	{
+		if (front(&deq->b) < pivot)
+			rbcnt += rb(deq);
+		else
+			pacnt += pa(deq);
+	}
+	while (rbcnt--)
+		rrb(deq);
+	ab(pacnt);
+	ba(rbcnt);
+}
 
 void	push_swap(t_deques *deq)
 {
@@ -145,7 +205,6 @@ void	push_swap(t_deques *deq)
 	//	smallest(deq);
 	//else if (deq->ordered[SIZE] <= 5)
 	//	smaller(deq);
-	//else
-		//quick_a(deq, 1, deq->ordered[SIZE]);
-		//quick_b(deq, 1, deq->ordered[SIZE]);
+	else
+		ab(deq, deq->ordered[SIZE]);
 }

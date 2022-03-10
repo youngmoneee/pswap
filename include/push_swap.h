@@ -6,7 +6,7 @@
 /*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 00:43:50 by youngpar          #+#    #+#             */
-/*   Updated: 2022/03/06 20:58:24 by youngpar         ###   ########.fr       */
+/*   Updated: 2022/03/10 19:33:47 by youngpar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ struct s_deques
  * Program Method
  */
 
-void	sa(t_deques *deq);
-void	sb(t_deques *deq);
-void	pa(t_deques *deq);
-void	pb(t_deques *deq);
-void	ra(t_deques *deq);
-void	rb(t_deques *deq);
-void	rra(t_deques *deq);
-void	rrb(t_deques *deq);
+t_bool	sa(t_deques *deq);
+t_bool	sb(t_deques *deq);
+t_bool	pa(t_deques *deq);
+t_bool	pb(t_deques *deq);
+t_bool	ra(t_deques *deq);
+t_bool	rb(t_deques *deq);
+t_bool	rra(t_deques *deq);
+t_bool	rrb(t_deques *deq);
 
 /*
  * util.c
@@ -110,6 +110,8 @@ int 	min(t_deque *deq);
 t_bool	is_sorted(t_deque *deq);
 void	quick_a(t_deques *deq, int start, int end);
 void	quick_b(t_deques *deq, int start, int end);
+void	ab(t_deques deq*, int size);
+void	ba(t_deques deq*, int size);
 
 //int		*lis(t_deque *deq);
 
