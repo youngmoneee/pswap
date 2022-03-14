@@ -10,6 +10,26 @@ int		*lis(t_deque *deq)
 	return (0);
 }
 
+int		median(t_deque *deq)
+{
+	int	*arr;
+	int	idx;
+
+	arr = (int *)malloc(sizeof(int) * deq->size);
+	if (!arr)
+		return (0);
+	idx = -1;
+	while (++idx < deq->size)
+	{
+		arr[idx] = pop_front(deq);
+		push_back(deq, arr[idx]);
+	}
+	check_sort(arr);
+	idx = arr[idx / 2];
+	free(arr);
+	return (idx);
+}
+
 static void	smallest(t_deques *deq)
 {
 	if (deq->a.size == 1)
@@ -45,94 +65,6 @@ static void	smaller(t_deques *deq)
 	}
 }
 
-/*
-void	quick_a(t_deques *deq, int start, int end)
-{
-	int median;
-	int cnt;
-	int racnt;
-	int pbcnt;
-
-	median = (start + end) / 2;
-	cnt = deq->a.size;
-	racnt = 0;
-	pbcnt = 0;
-	if (end - start == 1)
-		return ;
-	while (cnt--)
-	{
-		if (deq->ordered[median] <= front(&deq->a))
-		{
-			ra(deq);
-			racnt++;
-		}
-		else
-		{
-			pb(deq);
-			pbcnt++;
-		}
-	}
-	while(racnt--)
-		rra(deq);
-	printf("-------- A ---------\n");
-	for (t_u i = 0; i < deq->a.size; i++) {
-		printf("%d\n", front(&deq->a));
-		push_back(&deq->a, pop_front(&deq->a));
-	}
-	printf("\n-------- B ---------\n");
-	for (t_u i = 0; i < deq->b.size; i++) {
-		printf("%d\n", front(&deq->b));
-		push_back(&deq->b, pop_front(&deq->b));
-	}
-	//quick_a(deq, median, end);
-	//smallest(deq);
-	quick_a(deq, median + 1, end);
-	quick_b(deq, start, median - 1);
-}
-
-void	quick_b(t_deques *deq, int start, int end)
-{
-	int median;
-	int cnt;
-	int rbcnt;
-
-	median = (start + end) / 2;
-	cnt = deq->b.size;
-	rbcnt = 0;
-	if (deq->b.size == 1)
-	{
-		pa(deq);
-		return ;
-	}
-	while (--cnt)
-	{
-		if (deq->ordered[median] <= front(&deq->b))
-		{
-			rb(deq);
-			rbcnt++;
-		}
-		else
-		{
-			pa(deq);
-		}
-	}
-	while(rbcnt--)
-		rrb(deq);
-	printf("-------- A ---------\n");
-	for (t_u i = 0; i < deq->a.size; i++) {
-		printf("%d\n", front(&deq->a));
-		push_back(&deq->a, pop_front(&deq->a));
-	}
-	printf("\n-------- B ---------\n");
-	for (t_u i = 0; i < deq->b.size; i++) {
-		printf("%d\n", front(&deq->b));
-		push_back(&deq->b, pop_front(&deq->b));
-	}
-	quick_a(deq, start, median - 1);
-	quick_b(deq, median + 1, end);
-}
-*/
-
 void	ab(t_deques *deq, int size)
 {
 	int	cnt;
@@ -143,17 +75,17 @@ void	ab(t_deques *deq, int size)
 
 	if (&deq->a.size <= (t_u)3)
 	{
-		smaller(deq);
+		smallest(deq);
 		return ;
 	}
 	cnt = deq->a.size;
-	pivot = deq->ordered[size/ 2];
+	pivot = median(&deq->a);
 	racnt = 0;
 	pbcnt = 0;
 
-	while (cnt--)
+	while (size--)
 	{
-		if (front(&deq->a) > deq->ordered[med])
+		if (front(&deq->a) > pivot)
 			racnt += ra(deq);
 		else
 			pbcnt += pb(deq);
@@ -161,11 +93,21 @@ void	ab(t_deques *deq, int size)
 	tmp = racnt;
 	while (tmp--)
 		rra(deq);
+	printf("-------- A ---------\n");
+	for (t_u i = 0; i < deq->a.size; i++) {
+		printf("%d\n", front(&deq->a));
+		push_back(&deq->a, pop_front(&deq->a));
+	}
+	printf("\n-------- B ---------\n");
+	for (t_u i = 0; i < deq->b.size; i++) {
+		printf("%d\n", front(&deq->b));
+		push_back(&deq->b, pop_front(&deq->b));
+	}
 	ab(deq, racnt);
 	ba(deq, pbcnt);
 }
 
-void	ba(t_deques deq*, int size)
+void	ba(t_deques *deq, int size)
 {
 	int cnt;
 	int rbcnt;
@@ -178,21 +120,32 @@ void	ba(t_deques deq*, int size)
 		pa(deq);
 		return ;
 	}
-	cnt = deq->b.size;
-	pivot = deq->ordered[end - size / 2];
+	cnt = size;
+	pivot = median(&deq->b);
 	rbcnt = 0;
 	pacnt = 0;
-	while (size--)
+	while (cnt--)
 	{
-		if (front(&deq->b) < pivot)
+		if (front(&deq->a) < pivot)
 			rbcnt += rb(deq);
 		else
 			pacnt += pa(deq);
 	}
-	while (rbcnt--)
+	tmp = rbcnt;
+	while (tmp--)
 		rrb(deq);
-	ab(pacnt);
-	ba(rbcnt);
+	printf("-------- A ---------\n");
+	for (t_u i = 0; i < deq->a.size; i++) {
+		printf("%d\n", front(&deq->a));
+		push_back(&deq->a, pop_front(&deq->a));
+	}
+	printf("\n-------- B ---------\n");
+	for (t_u i = 0; i < deq->b.size; i++) {
+		printf("%d\n", front(&deq->b));
+		push_back(&deq->b, pop_front(&deq->b));
+	}
+	ab(deq, pacnt);
+	ba(deq, rbcnt);
 }
 
 void	push_swap(t_deques *deq)
@@ -206,5 +159,5 @@ void	push_swap(t_deques *deq)
 	//else if (deq->ordered[SIZE] <= 5)
 	//	smaller(deq);
 	else
-		ab(deq, deq->ordered[SIZE]);
+		ab(deq, deq->a.size);
 }

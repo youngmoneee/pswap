@@ -110,8 +110,9 @@ int 	min(t_deque *deq);
 t_bool	is_sorted(t_deque *deq);
 void	quick_a(t_deques *deq, int start, int end);
 void	quick_b(t_deques *deq, int start, int end);
-void	ab(t_deques deq*, int size);
-void	ba(t_deques deq*, int size);
+int		median(t_deque *deq);
+void	ab(t_deques *deq, int size);
+void	ba(t_deques *deq, int size);
 
 //int		*lis(t_deque *deq);
 
