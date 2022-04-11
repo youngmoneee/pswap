@@ -14,14 +14,15 @@
 
 t_bool	push_back(t_deque *deq, int value)
 {
-	t_node 	*new;
+	t_node	*new;
 
 	new = (t_node *)malloc(sizeof(t_node));
 	if (!new)
 		return (FALSE);
 	new->val = value;
 	deq->size++;
-	if (deq->front.next == &deq->back || deq->size == 1) {
+	if (deq->front.next == &deq->back || deq->size == 1)
+	{
 		new->prev = &deq->front;
 		deq->front.next = new;
 		new->next = &deq->back;
@@ -35,7 +36,7 @@ t_bool	push_back(t_deque *deq, int value)
 	return (TRUE);
 }
 
-int 	pop_back(t_deque *deq)
+int	pop_back(t_deque *deq)
 {
 	t_node	*tmp;
 	int		ret;
@@ -57,9 +58,9 @@ int 	pop_back(t_deque *deq)
 	return (ret);
 }
 
-int 	back(t_deque *deq)
+int	back(t_deque *deq)
 {
-	int ret;
+	int	ret;
 
 	ret = deq->back.prev->val;
 	return (ret);
@@ -70,4 +71,11 @@ t_bool	empty(t_deque *deq)
 	if (deq->size)
 		return (FALSE);
 	return (TRUE);
+}
+
+int	pivoting(t_deques *deqs, int idx)
+{
+	if (idx >= deqs->ordered[0])
+		return (deqs->ordered[deqs->ordered[0]]);
+	return (deqs->ordered[idx + 1]);
 }

@@ -14,14 +14,15 @@
 
 t_bool	push_front(t_deque *deq, int value)
 {
-	t_node 	*new;
+	t_node	*new;
 
 	new = (t_node *)malloc(sizeof(t_node));
 	if (!new)
 		return (FALSE);
 	new->val = value;
 	deq->size++;
-	if (deq->front.next == &deq->back) {
+	if (deq->front.next == &deq->back)
+	{
 		new->prev = &deq->front;
 		deq->front.next = new;
 		new->next = &deq->back;
@@ -35,7 +36,7 @@ t_bool	push_front(t_deque *deq, int value)
 	return (TRUE);
 }
 
-int 	pop_front(t_deque *deq)
+int	pop_front(t_deque *deq)
 {
 	t_node	*tmp;
 	int		ret;
@@ -57,18 +58,35 @@ int 	pop_front(t_deque *deq)
 	return (ret);
 }
 
-int 	front(t_deque *deq)
+int	front(t_deque *deq)
 {
-	int ret;
+	int	ret;
 
 	ret = deq->front.next->val;
 	return (ret);
 }
 
-int 	second(t_deque *deq)
+int	second(t_deque *deq)
 {
-	int ret;
+	int	ret;
 
 	ret = deq->front.next->next->val;
 	return (ret);
+}
+
+int	find(t_deque *deq, int value)
+{
+	int		idx;
+	t_node	*cur;
+
+	idx = 0;
+	cur = deq->front.next;
+	while (cur != &deq->back)
+	{
+		if (cur->val == value)
+			return (idx);
+		idx++;
+		cur = cur->next;
+	}
+	return (-1);
 }

@@ -1,19 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/11 17:38:57 by youngpar          #+#    #+#             */
+/*   Updated: 2022/04/11 17:38:59 by youngpar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/push_swap.h"
 
-int 	cnt_int(char *str)
+int	cnt_int(char *str)
 {
-	int ret;
+	int	ret;
 
 	ret = 0;
-	while(*str)
+	while (*str)
 	{
 		while (*str && is_space(*str))
 			str++;
-		if (*str) ret++;
+		if (*str)
+			ret++;
 		while (*str && !is_space(*str))
 			str++;
 	}
-	return ret;
+	return (ret);
 }
 
 static t_ll	get_nbr(char **str)
@@ -37,11 +50,11 @@ static t_ll	get_nbr(char **str)
 	return (ret * sign);
 }
 
-static int*	arr_alloc(int argc, char **argv)
+static int	*arr_alloc(int argc, char **argv)
 {
-	int*	ret;
-	int 	idx;
-	int 	cnt;
+	int	*ret;
+	int	idx;
+	int	cnt;
 
 	idx = 0;
 	cnt = 0;
@@ -55,13 +68,13 @@ static int*	arr_alloc(int argc, char **argv)
 	if (!ret)
 		return (FALSE);
 	ret[SIZE] = cnt;
-	return ret;
+	return (ret);
 }
 
-t_bool 	parse_int(int argc, char **argv, int **arr)
+t_bool	parse_int(int argc, char **argv, int **arr)
 {
-	int 	idx;
-	int 	arr_idx;
+	int		idx;
+	int		arr_idx;
 	t_ll	check;
 
 	idx = 0;
@@ -87,19 +100,21 @@ t_bool 	parse_int(int argc, char **argv, int **arr)
 	return (TRUE);
 }
 
-t_bool	is_sorted(t_deque *deq)
+t_bool	is_sorted(t_deque *deq, t_bool flag)
 {
 	t_node	*curr;
-	int 	val;
+	int		val;
 
 	curr = deq->front.next;
 	if (curr == &deq->back)
 		return (TRUE);
 	val = curr->val;
 	curr = curr->next;
-	while(curr != &deq->back)
+	while (curr != &deq->back)
 	{
-		if (val > curr->val)
+		if (flag == A && val > curr->val)
+			return (FALSE);
+		else if (flag == B && val < curr->val)
 			return (FALSE);
 		val = curr->val;
 		curr = curr->next;

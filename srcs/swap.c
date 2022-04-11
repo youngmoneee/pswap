@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   swap.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/11 17:39:25 by youngpar          #+#    #+#             */
+/*   Updated: 2022/04/11 17:39:26 by youngpar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/push_swap.h"
 
 t_bool	sa(t_deques *deq)
 {
-	int 	first;
-	int 	second;
+	int		first;
+	int		second;
 
 	if (deq->a.size < 2)
 		return (FALSE);
@@ -17,8 +29,8 @@ t_bool	sa(t_deques *deq)
 
 t_bool	sb(t_deques *deq)
 {
-	int 	first;
-	int 	second;
+	int		first;
+	int		second;
 
 	if (deq->b.size < 2)
 		return (FALSE);
@@ -48,9 +60,9 @@ t_bool	pb(t_deques *deq)
 	return (TRUE);
 }
 
-int		max(t_deque *deq)
+int	max(t_deque *deq)
 {
-	int 	max_val;
+	int		max_val;
 	t_node	*curr;
 
 	curr = deq->front.next;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   swap2.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/11 17:39:07 by youngpar          #+#    #+#             */
+/*   Updated: 2022/04/11 17:39:10 by youngpar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/push_swap.h"
 
 t_bool	ra(t_deques *deq)
@@ -36,9 +48,9 @@ t_bool	rrb(t_deques *deq)
 	return (TRUE);
 }
 
-int		min(t_deque *deq)
+int	min(t_deque *deq)
 {
-	int 	min_val;
+	int		min_val;
 	t_node	*curr;
 
 	curr = deq->front.next;

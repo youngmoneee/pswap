@@ -1,34 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   algo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: youngpar <youngseo321@gmail.com>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/11 17:57:00 by youngpar          #+#    #+#             */
+/*   Updated: 2022/04/11 18:32:06 by youngpar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/push_swap.h"
-
-int		*lis(t_deque *deq)
-{
-	int 	*ret;
-
-	ret = (int *)malloc(sizeof(int) * (deq->size + 1));
-	if (!ret)
-		return (0);
-	return (0);
-}
-
-int		median(t_deque *deq)
-{
-	int	*arr;
-	int	idx;
-
-	arr = (int *)malloc(sizeof(int) * deq->size);
-	if (!arr)
-		return (0);
-	idx = -1;
-	while (++idx < deq->size)
-	{
-		arr[idx] = pop_front(deq);
-		push_back(deq, arr[idx]);
-	}
-	check_sort(arr);
-	idx = arr[idx / 2];
-	free(arr);
-	return (idx);
-}
 
 static void	smallest(t_deques *deq)
 {
@@ -48,11 +30,13 @@ static void	smallest(t_deques *deq)
 static void	smaller(t_deques *deq)
 {
 	while (deq->b.size < 2)
+	{
 		if (front(&deq->a) == deq->ordered[1]
-		|| front(&deq->a) == deq->ordered[deq->ordered[0]])
+			|| front(&deq->a) == deq->ordered[deq->ordered[0]])
 			pb(deq);
 		else
 			ra(deq);
+	}
 	smallest(deq);
 	while (!empty(&deq->b))
 		pa(deq);
@@ -65,99 +49,69 @@ static void	smaller(t_deques *deq)
 	}
 }
 
-void	ab(t_deques *deq, int size)
+void	ab(t_deques *deq)
 {
 	int	cnt;
-	int	racnt;
-	int	pbcnt;
+	int	size;
 	int	pivot;
-	int	tmp;
+	int	pivot2;
 
-	if (&deq->a.size <= (t_u)3)
+	cnt = 0;
+	size = deq->ordered[0];
+	while (deq->a.size)
 	{
-		smallest(deq);
-		return ;
-	}
-	cnt = deq->a.size;
-	pivot = median(&deq->a);
-	racnt = 0;
-	pbcnt = 0;
-
-	while (size--)
-	{
-		if (front(&deq->a) > pivot)
-			racnt += ra(deq);
+		pivot = pivoting(deq, cnt);
+		pivot2 = pivoting(deq, \
+				cnt + (int)(0.000000053 * size * size + 0.03 * size + 14.5));
+		if (front(&deq->a) <= pivot)
+			cnt += pb(deq);
+		else if (pivot < front(&deq->a) && front(&deq->a) <= pivot2)
+		{
+			cnt += pb(deq);
+			rb(deq);
+		}
 		else
-			pbcnt += pb(deq);
+			ra(deq);
 	}
-	tmp = racnt;
-	while (tmp--)
-		rra(deq);
-	printf("-------- A ---------\n");
-	for (t_u i = 0; i < deq->a.size; i++) {
-		printf("%d\n", front(&deq->a));
-		push_back(&deq->a, pop_front(&deq->a));
-	}
-	printf("\n-------- B ---------\n");
-	for (t_u i = 0; i < deq->b.size; i++) {
-		printf("%d\n", front(&deq->b));
-		push_back(&deq->b, pop_front(&deq->b));
-	}
-	ab(deq, racnt);
-	ba(deq, pbcnt);
+	ba(deq);
 }
 
-void	ba(t_deques *deq, int size)
+void	ba(t_deques *deq)
 {
-	int cnt;
-	int rbcnt;
-	int pacnt;
-	int pivot;
-	int tmp;
+	int	pivot;
 
-	if (size == 1)
+	while (deq->b.size)
 	{
-		pa(deq);
-		return ;
-	}
-	cnt = size;
-	pivot = median(&deq->b);
-	rbcnt = 0;
-	pacnt = 0;
-	while (cnt--)
-	{
-		if (front(&deq->a) < pivot)
-			rbcnt += rb(deq);
+		pivot = max(&deq->b);
+		if (find(&deq->b, pivot) == 1 && front(&deq->b) > back(&deq->b))
+			sb(deq);
+		else if (find(&deq->b, pivot) <= (int)deq->b.size / 2)
+		{
+			while (front(&deq->b) != pivot)
+			{
+				if (second(&deq->b) == pivot && front(&deq->b) > back(&deq->b))
+					sb(deq);
+				else
+					rb(deq);
+			}
+		}
 		else
-			pacnt += pa(deq);
+		{
+			while (front(&deq->b) != pivot)
+				rrb(deq);
+		}
+		pa(deq);
 	}
-	tmp = rbcnt;
-	while (tmp--)
-		rrb(deq);
-	printf("-------- A ---------\n");
-	for (t_u i = 0; i < deq->a.size; i++) {
-		printf("%d\n", front(&deq->a));
-		push_back(&deq->a, pop_front(&deq->a));
-	}
-	printf("\n-------- B ---------\n");
-	for (t_u i = 0; i < deq->b.size; i++) {
-		printf("%d\n", front(&deq->b));
-		push_back(&deq->b, pop_front(&deq->b));
-	}
-	ab(deq, pacnt);
-	ba(deq, rbcnt);
 }
 
 void	push_swap(t_deques *deq)
 {
-	if (is_sorted(&deq->a))
+	if (is_sorted(&deq->a, A))
 		return ;
-	if (FALSE)
+	if (deq->ordered[SIZE] <= 3)
+		smallest(deq);
+	else if (deq->ordered[SIZE] <= 5)
 		smaller(deq);
-	//if (deq->ordered[SIZE] <= 3)
-	//	smallest(deq);
-	//else if (deq->ordered[SIZE] <= 5)
-	//	smaller(deq);
 	else
-		ab(deq, deq->a.size);
+		ab(deq);
 }
